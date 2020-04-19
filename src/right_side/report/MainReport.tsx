@@ -1,38 +1,33 @@
-import React, {useState, useRef ,useEffect} from 'react'
-import {static_data,Report as ReportModel,getReportDuring} from '../model/Report';
-import { inherits } from 'util';
+import React, {useRef } from 'react'
+import {Report as ReportModel,getReportDuring} from '../model/Report';
 
 /**
  * Main page for report
  */
-/*
-export const Report :React.FC =  () => {
 
-    const [Reports, setReports] = useState<ReportModel[]>();
-    
-    const changeState = (new_report : ReportModel[])=> {
-        setReports(new_report);
-    }
-    const init = () => {
-        const result = getReportDuring('2020-03-01','2020-03-30')
-        result.then(data => {
-            changeState(data);
-         })
-        // init()
-    }
-    
-    return (
-        <div>
-            <div className="header my-3">
-                <h3>Transaction Record</h3>
-            </div>
-            <Upperdiv changeState={changeState} />
-            <ReportList  changeState={changeState} reports={Reports}/>
-        </div>
-    )
+const getTodayAndAfter = () => {
+    console.log(`get date working`)
+    let today = new Date()
+    let month  =  ("0" + (today.getMonth()+1)).slice(-2);
+    let date = ("0" +today.getDate()).slice(-2);
+    let tmr = ("0" +(today.getDate() + 1)).slice(-2);
+    let year = today.getFullYear();
+    return {
+        start_today : `${year}-${month}-${date}` ,
+        tomorrow_end : `${year}-${month}-${tmr}`
+    } 
 }
-*/
 
+const _defaultDate = {
+    start : getTodayAndAfter().start_today,
+    end : getTodayAndAfter().tomorrow_end
+} 
+
+/**
+ * 
+ * GET STARTED COMPONENT
+ * 
+ */
 export class Report extends React.Component<{},{Reports:ReportModel[]}> {
     constructor (props:any){
         super(props)
@@ -41,12 +36,12 @@ export class Report extends React.Component<{},{Reports:ReportModel[]}> {
         }
         this.init();
     }
-    
+    defaultDate = _defaultDate;
     changeState = (new_report : ReportModel[])=> {
         this.setState( { Reports: new_report});
     }
     init = () => {
-        const result = getReportDuring('2020-03-29','2020-03-30')
+        const result = getReportDuring(this.defaultDate.start,this.defaultDate.end)
         result.then(data => {
             this.changeState(data);
          })
@@ -57,31 +52,44 @@ export class Report extends React.Component<{},{Reports:ReportModel[]}> {
         return (
             <div>
                 <div className="header my-3">
-                    <h3>Transaction Record</h3>
+                    <h3>Transaction Report</h3>
                 </div>
-                <Upperdiv changeState={this.changeState} />
+                <Upperdiv changeState={this.changeState}  />
                 <ReportList  changeState={this.changeState} reports={this.state.Reports}/>
             </div>
         )
     }
 }
+
 const Upperdiv =(props : any) => {
      const start_date = useRef<HTMLInputElement>(null);
      const end_date = useRef<HTMLInputElement>(null);
+     const defaultDate = _defaultDate;
      const onSearch = () => {
-        //  console.log(start_date.current?.value)
-        //  console.log(end_date.current?.value)
+            /// if nothing on search error
          const result =  getReportDuring(start_date.current?.value,end_date.current?.value)
          result.then(data => {
             props.changeState(data);
          })
          
      }
-    return (
-        <div className="d-flex justify-content-end my-4">
-            <input ref={start_date} className="form-control w-25" type="date" defaultValue="2020-03-01" placeholder="start"/>
+    //  const getInitialState= ()=> {
+    //      if(start_date.current !== null && end_date.current !== null ){
             
-            <input ref={end_date} className="form-control w-25"  type="date" defaultValue="2020-03-31"  placeholder="end"/>
+    //        start_date.current.value = defaultDate.start;
+    //        end_date.current.value = defaultDate.end;
+    //      }
+      
+    //  }
+     
+    
+    //getInitialState()
+    return (
+      
+        <div className="d-flex justify-content-end my-4">
+            <input ref={start_date} className="form-control w-25" type="date" id="left_input" defaultValue={defaultDate.start} placeholder="start"/>
+            
+            <input ref={end_date} className="form-control w-25"  type="date" id="right_input"  defaultValue={defaultDate.end} placeholder="end"/>
             <button className="btn btn-outline-primary" onClick={onSearch}>Search</button>
         </div>
      
@@ -92,23 +100,19 @@ const ReportList = (props : any) => {
 
    const reports : ReportModel[] = props.reports;
   
-//    useEffect(() =>{
-//        const result = getReportDuring('2020-03-01','2020-03-30')
-//         result.then(data => {
-//             props.changeState(data);
-//          })
-//    }, [props] );
-    // const initializeState = () => {
-    //     const result = getReportDuring('2020-03-01','2020-03-30')
-    //             result.then(data => {
-    //                 props.changeState(data);
-    //              })
-    // }
-    //initializeState();
     const sumTotal = (reports : ReportModel[]) => {
         let data  = 0;
-       
+        for (const report  of reports) {
+            console.log(report)
+        //   let _report : ReportModel = JSON.parse(report);
+        //   console.log(_report)
         
+           data += report.total_price === undefined ? 0 :parseFloat( report.total_price);
+            
+          console.log(data)
+        }
+        /**sum total */
+        console.log(data)
         return data;
     }
 
@@ -120,7 +124,7 @@ const ReportList = (props : any) => {
                         <th>N*</th>
                         <th>Service</th>
                         <th>Amount</th>
-                        <th>Total</th>
+                        <th>Total Income</th>
                         
                     </tr>
                </thead>
@@ -129,11 +133,11 @@ const ReportList = (props : any) => {
                     <tr></tr>
                     {reports.map(report => {
                         return ( 
-                            <tr>
+                            <tr key={report.categoryId}>
                                 <td>{report.categoryId}</td>
                                 <td>{report.name}</td>
                                 <td>{report.service_amount}</td>
-                                <td>{report.total_price}</td>  
+                                <td className="text-right">{report.total_price} $</td>  
                             </tr>
                         )
                     }) }
@@ -145,8 +149,8 @@ const ReportList = (props : any) => {
                         <th>
                             
                         </th>
-                        <th>
-                            <h4>0000</h4>
+                        <th  className="text-right">
+                            <h4>{sumTotal(reports).toString()} $</h4>
                         </th>
                     </tr>
                 </tfoot>

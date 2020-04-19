@@ -3,7 +3,7 @@ export interface Report {
     categoryId ?: number,
     name ?: string,
     service_amount?: number | string,
-    total_price?: number | string
+    total_price?:  string
 }
 
 const GET_URL = "http://localhost:3001/record/report"

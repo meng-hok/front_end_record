@@ -1,13 +1,13 @@
 
-import React,{useState} from 'react';
-import $ from 'jquery';
+import React, { useContext } from 'react';
 import { CategoryCard } from './insert/CategoryCard';
 import {Category, getAllCategoies} from './model/Category';
 import { NewCategory } from './insert/NewCategory';
-import { ReactComponent } from '*.svg';
-import { throws } from 'assert';
-import { Report } from './report/MainReport';
 
+import { Report } from './report/MainReport';
+import { createStore } from 'redux';
+import { counterRecord } from './insert/RecordRedux';
+import { Provider } from 'react-redux';
 export const RightSide : any = (props: any) => {
         
         const index  = props.status;
@@ -30,7 +30,7 @@ const dataStatic  :Category[] = [
 
  * Main page for insert
  */
- 
+const records = createStore(counterRecord);
 export class Insert extends React.Component<{},{categories :Category[]}> {
     constructor (props:any){
         super(props)
@@ -53,12 +53,7 @@ export class Insert extends React.Component<{},{categories :Category[]}> {
         data
             .then(category=> {
                if  (category.length ){
-                    // this.setState(state => {
-                    //     console.log(state)
-                    //     state.categories.push(category);
-                    //     return state
-                    // })
-                    console.log("working when")
+                  
                     this.setState({categories :category })
                }else{
                    console.log(`non of category is found`)
@@ -75,30 +70,53 @@ export class Insert extends React.Component<{},{categories :Category[]}> {
     addNewCategory = (category:Category) => {
         this.setState(state => {
             //s
-            state.categories.push(category);
-            return state;
+            const _cateogries = state.categories;
+            // state.categories.push(category);
+            return { categories: [..._cateogries , category]};
         })
+        
+    }
+
+    removeCategoryById = (cur_id :number) => {
+        // this.setState(state  => {
+           // eslint-disable-next-line array-callback-return
+        //    const cur_category = state.categories;
+        //     if(state.categories !== undefined) {
+
+        //         const category = cur_category.map(category=> {
+        //             if(category.id !== cur_id){
+        //                 return category;
+        //             }
+        //        });
+        //        return {categories : [category]};
+        //     }
+           this.initializeState()
+          
+        // })
     }
     /**
      * loop through
      */
+    // recordMethod = useContext(RecordListContext);
     render(){
 
         return (
-            <div className="content  d-flex">
-                <div className="mt-4 w-75 d-flex flex-wrap justify-content-around ">
-                    {this.state.categories.map(category => {
-                        return (
-                            <CategoryCard key={category.id} category={category}/>
-                        )
-                    })}
-                </div>
-                <div className="w-25 insertion border-left">
-                    <NewCategory addCategory={this.addNewCategory}/>
-                    
-                </div>
-                
-            </div>
+            <Provider store={records}>
+                <div className="content  d-flex">
+                    <div className="mt-4 w-75 d-flex flex-wrap justify-content-around ">
+                        {this.state.categories.map(category => {
+                            return (
+                                <CategoryCard key={category.id} category={category} remove={this.removeCategoryById}/>
+                            )
+                        })}
+                    </div>
+                    <div className="w-25 insertion border-left">
+                        <NewCategory addCategory={this.addNewCategory}/>
+                        
+                    </div>
+                    {/* <button onClick={this.recordMethod}>click</button> */}
+                </div>  
+            </Provider>
         )
         
     }

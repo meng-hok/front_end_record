@@ -6,7 +6,7 @@ export interface Category {
 }
 const GETDATA :string = "http://localhost:3001/category"
 const CATEGORYUPLOADENDPOINT :string = "http://localhost:3001/category";
-
+const CATEGORYREMOVEENDPOINT : string = "http://localhost:3001/category/remove"
 const HEADERS = {
     // 'Accept': 'application/json',
     // 'Content-Type': 'application/json'
@@ -28,6 +28,7 @@ export const uploadCategory = async ( _category:Category)=> {
     try {
         let category :Category;
         category = _category;
+       
         const result = await fetch(CATEGORYUPLOADENDPOINT,{
             body : JSON.stringify(category),
             method :'POST',
@@ -53,4 +54,23 @@ export const uploadCategory = async ( _category:Category)=> {
             description : "FAIL"
         }
     }    
+}
+
+export const removeCategory = async (_category : Category) => {
+    try {
+        const res = await fetch(CATEGORYREMOVEENDPOINT,
+            {
+            method : "PUT",
+            body : JSON.stringify(_category), 
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+              }});
+        const json = await res.json()
+        console.log(json)
+        return json
+    } catch (error) {
+        console.log(error)
+        return error;
+    }
 }

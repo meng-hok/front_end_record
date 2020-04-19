@@ -31,12 +31,13 @@ const App = ()=> {
   
     return (
       <div className="App container-fluid ">
-        <div className="row vh-100">
-          <div className="col-2 border">
+        <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Hanuman&family=Montserrat&family=Roboto&display=swap" rel="stylesheet"></link>
+        <div className="d-flex min-vh-100">
+          <div className="w-10 border-right">
             <LeftSide setStatus={setMyStatus} active={index}/>
             
           </div>
-          <div className="col-10 border">
+          <div className="w-90 ">
             
             <RightSide status={index}/>
           </div>
