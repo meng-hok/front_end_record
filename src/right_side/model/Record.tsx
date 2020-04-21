@@ -6,6 +6,7 @@ export type ServiceRecord = {
     id? : number;
     service_amount : number;
     category : Category;
+    created?: Date;
 }
 
 let upload_endpoint :string = myURL+"/record/post";
@@ -16,6 +17,7 @@ export const saveRecord =async (record:ServiceRecord) =>  {
     try {
         let serviceRecord :ServiceRecord;
         serviceRecord = record;
+        serviceRecord.created = new Date();
         const result = await fetch(upload_endpoint,{
             body : JSON.stringify(serviceRecord),
             method :'POST',
