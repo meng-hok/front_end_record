@@ -19,7 +19,7 @@ export const NewCategory = (props:any) => {
             price :  price.current ==  null ? 0 : parseFloat(price.current.value)
         }
         const result =  uploadCategory(category)
-        // console.log(result)
+      
           
         result.then(_category =>{
             /**

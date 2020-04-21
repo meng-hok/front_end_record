@@ -1,18 +1,19 @@
+import {myURL} from '../../GlobalHelper';
 export interface Category { 
     id? : number;
     name?: string;
     image?: string;
     price?: number
 }
-const GETDATA :string = "http://localhost:3001/category"
-const CATEGORYUPLOADENDPOINT :string = "http://localhost:3001/category";
-const CATEGORYREMOVEENDPOINT : string = "http://localhost:3001/category/remove"
+const GETDATA :string = myURL+"/category"
+const CATEGORYUPLOADENDPOINT :string = myURL+"/category";
+const CATEGORYREMOVEENDPOINT : string = myURL+"/category/remove"
 const HEADERS = {
     // 'Accept': 'application/json',
     // 'Content-Type': 'application/json'
   }
 export const getAllCategoies  = async () => {
-    console.log("hi my data")
+  
     try {
         const result =await fetch(GETDATA);
         const json = await result.json();

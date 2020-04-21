@@ -12,13 +12,13 @@ export const counterRecord =
                     state.records = action.object
                     return state;
                 case 'INSERT':
-                    console.log("INSERT WORKING")
+                   
                     // state.records;
                     const new_state = {records : [...state.records,action.object]};
                     // new_state.records.push(action.object)
                     return new_state;    
                 default: 
-                        console.log("backtoempty")
+                        
                      return {records : [] }
        
             }

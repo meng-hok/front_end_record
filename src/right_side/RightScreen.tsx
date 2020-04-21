@@ -42,7 +42,7 @@ export class Insert extends React.Component<{},{categories :Category[]}> {
     }
    
    componentDidMount(){
-       console.log("compoentn that call")
+      
        this.initializeState()
    }
     componentDidUpdate(){
@@ -56,14 +56,14 @@ export class Insert extends React.Component<{},{categories :Category[]}> {
                   
                     this.setState({categories :category })
                }else{
-                   console.log(`non of category is found`)
+               
                }
             })
             .catch(err => {
                 console.log(err)
-                console.log(`non of category is found`)
+              
             })
-        console.log("fetch te")
+     
         console.log( this.state)
     }
    

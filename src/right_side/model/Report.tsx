@@ -1,3 +1,4 @@
+import { myURL } from "../../GlobalHelper";
 
 export interface Report {
     categoryId ?: number,
@@ -6,7 +7,7 @@ export interface Report {
     total_price?:  string
 }
 
-const GET_URL = "http://localhost:3001/record/report"
+const GET_URL = myURL+"/record/report"
 
 export const getReportDuring= async (start: any ,end : any) => {
     try {

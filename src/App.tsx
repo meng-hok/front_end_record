@@ -23,7 +23,7 @@ const App = ()=> {
       
       const new_index = { status: stt};
       
-      console.log(new_index)
+    
       return new_index
     })
   }

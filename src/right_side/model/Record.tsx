@@ -1,4 +1,5 @@
 import { Category } from "./Category";
+import { myURL } from "../../GlobalHelper";
 
 
 export type ServiceRecord = {
@@ -7,9 +8,9 @@ export type ServiceRecord = {
     category : Category;
 }
 
-let upload_endpoint :string = "http://localhost:3001/record/post";
-const RECORDONTODAY :string = "http://localhost:3001/record/today";
-const REMOVERECORD :string = "http://localhost:3001/record/remove";
+let upload_endpoint :string = myURL+"/record/post";
+const RECORDONTODAY :string = myURL+"/record/today";
+const REMOVERECORD :string = myURL+"/record/remove";
 export const saveRecord =async (record:ServiceRecord) =>  {
    
     try {
