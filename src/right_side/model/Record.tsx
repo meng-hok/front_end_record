@@ -18,6 +18,7 @@ export const saveRecord =async (record:ServiceRecord) =>  {
         let serviceRecord :ServiceRecord;
         serviceRecord = record;
         serviceRecord.created = new Date();
+        console.log(serviceRecord)
         const result = await fetch(upload_endpoint,{
             body : JSON.stringify(serviceRecord),
             method :'POST',
